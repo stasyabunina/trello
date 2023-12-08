@@ -57,7 +57,7 @@ body {
 
 .column__cards {
   margin: 0;
-  margin-bottom: 15px;
+  margin-bottom: 18px;
   padding: 0;
   list-style-type: none;
 }
@@ -92,6 +92,10 @@ body {
   text-decoration: underline;
 }
 
+.column__btn--hidden {
+  display: none;
+}
+
 .plus {
   margin-right: 5px;
   font-size: 19px;
@@ -117,4 +121,58 @@ body {
   border-radius: 3px;
   font-size: 12px;
   cursor: pointer;
+}
+
+.form {
+  width: 100%;
+}
+
+.form__input {
+  display: block;
+  width: 100%;
+  height: 60px;
+  padding: 10px;
+  margin-bottom: 8px;
+  border: none;
+  border-radius: 3px;
+  resize: none;
+  font-size: 15px;
+  font-family: inherit;
+}
+
+.form__input::placeholder {
+  font-family: inherit;
+}
+
+.form__input:focus-visible {
+  outline: none;
+}
+
+.form__add {
+  margin-right: 5px;
+  padding: 8px 11px;
+  display: inline-flex;
+  text-align: center;
+  font-weight: 600;
+  font-size: 15px;
+  border: none;
+  border-radius: 3px;
+  color: white;
+  background-color: #5CA84D;
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+.form__close {
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  justify-content: center;
+  vertical-align: middle;
+  border: none;
+  padding: 0;
+  background-color: transparent;
+  cursor: pointer;
+  color: gray;
+  font-size: 20px;
 }
