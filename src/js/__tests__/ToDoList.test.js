@@ -1,1 +1,1 @@
-test('dummy for testing', () => expect(0).toBe(0));
+test("dummy for testing", () => expect(0).toBe(0));

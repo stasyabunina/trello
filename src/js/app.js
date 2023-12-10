@@ -1,7 +1,7 @@
-import ToDoList from './ToDoList';
-import Storage from './Storage';
+import ToDoList from "./ToDoList";
+import Storage from "./Storage";
 
-const container = document.querySelector('.container');
+const container = document.querySelector(".container");
 
 const storage = new Storage();
 

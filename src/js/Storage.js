@@ -4,18 +4,18 @@ export default class Storage {
   }
 
   save(data) {
-    this.storage.setItem('data', JSON.stringify(data));
+    this.storage.setItem("data", JSON.stringify(data));
   }
 
   load() {
     try {
-      return JSON.parse(this.storage.getItem('data'));
+      return JSON.parse(this.storage.getItem("data"));
     } catch (e) {
-      throw new Error('Invalid data');
+      throw new Error("Invalid data");
     }
   }
 
   remove() {
-    this.storage.removeItem('data');
+    this.storage.removeItem("data");
   }
 }
