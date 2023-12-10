@@ -9,61 +9,65 @@
 </head>
 
 <body>
-  <div class="container">
-    <ul class="columns">
-      <li class="column">
-        <article class="column__wrapper">
-          <h2 class="column__title">Todo</h2>
-          <ul class="column__cards">
-            <li class="column__card">
-              <p class="column__text">An example card.</p>
-            </li>
-            <li class="column__card">
-              <p class="column__text">An example card.</p>
-            </li>
-            <li class="column__card">
-              <p class="column__text">An example card.</p>
-            </li>
-          </ul>
-          <button class="column__btn" type="button"><span class="plus">+</span><span class="column__btn-text">Add another card</span></button>
-        </article>
-      </li>
-      <li class="column">
-        <article class="column__wrapper">
-          <h2 class="column__title">In Progress</h2>
-          <ul class="column__cards">
-            <li class="column__card">
-              <p class="column__text">An example card.</p>
-            </li>
-            <li class="column__card">
-              <p class="column__text">An example card.</p>
-            </li>
-          </ul>
-          <button class="column__btn" type="button"><span class="plus">+</span><span class="column__btn-text">Add another card</span></button>
-        </article>
-      </li>
-      <li class="column">
-        <article class="column__wrapper">
-          <h2 class="column__title">Done</h2>
-          <ul class="column__cards">
-            <li class="column__card">
-              <p class="column__text">An example card.</p>
-            </li>
-            <li class="column__card">
-              <p class="column__text">An example card.</p>
-            </li>
-            <li class="column__card">
-              <p class="column__text">An example card.</p>
-            </li>
-            <li class="column__card">
-              <p class="column__text">An example card.</p>
-            </li>
-          </ul>
-          <button class="column__btn" type="button"><span class="plus">+</span><span class="column__btn-text">Add another card</span></button>
-        </article>
-      </li>
-    </ul>
-  </div>
+  <main class="main">
+    <div class="container">
+      <div class="main__wrapper">
+        <div class="top main__top">
+          <span class="top__text"></span>
+          <div class="top__buttons">
+            <button class="top__clear" type="button">Clear all</button>
+          </div>
+        </div>
+        <ul class="columns main__columns">
+          <li class="column_to-do column">
+            <article class="column__wrapper">
+              <h2 class="column__title">Todo</h2>
+              <ul class="column__cards">
+                <li class="column__card">
+                  <p class="column__text">An example card.</p>
+                </li>
+                <li class="column__card">
+                  <p class="column__text">Another example card.</p>
+                </li>
+              </ul>
+              <button class="column__btn" type="button"><span class="plus">+</span><span class="column__btn-text">Add
+                  another card</span></button>
+            </article>
+          </li>
+          <li class="column_in-progress column">
+            <article class="column__wrapper">
+              <h2 class="column__title">In Progress</h2>
+              <ul class="column__cards">
+                <li class="column__card">
+                  <p class="column__text">This is an example card.</p>
+                </li>
+              </ul>
+              <button class="column__btn" type="button"><span class="plus">+</span><span class="column__btn-text">Add
+                  another card</span></button>
+            </article>
+          </li>
+          <li class="column_done column">
+            <article class="column__wrapper">
+              <h2 class="column__title">Done</h2>
+              <ul class="column__cards">
+                <li class="column__card">
+                  <p class="column__text">And this is also an example card.</p>
+                </li>
+                <li class="column__card">
+                  <p class="column__text">Just an example card.</p>
+                </li>
+                <li class="column__card">
+                  <p class="column__text">An example card again.</p>
+                </li>
+              </ul>
+              <button class="column__btn" type="button"><span class="plus">+</span><span class="column__btn-text">Add
+                  another card</span></button>
+            </article>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </main>
 </body>
 
 </html>
