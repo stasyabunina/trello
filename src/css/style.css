@@ -17,7 +17,7 @@ body {
   margin: 0 auto;
 }
 
-.main__wrapper {
+.list__wrapper {
   padding: 80px 0;
   display: flex;
   flex-direction: column;
@@ -96,6 +96,10 @@ body {
   list-style-type: none;
 }
 
+.transparent {
+  opacity: 0;
+}
+
 .column__card {
   display: block;
   position: relative;
@@ -117,8 +121,8 @@ body {
   pointer-events: none;
 }
 
-.transparent {
-  opacity: 0;
+.column__card.column__card--hidden {
+  display: none;
 }
 
 .column__text {
@@ -175,6 +179,10 @@ body {
 
 .form {
   width: 100%;
+}
+
+.form--error {
+  margin-bottom: 8px;
 }
 
 .form__input {

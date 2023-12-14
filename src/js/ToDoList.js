@@ -8,7 +8,7 @@ export default class ToDoList {
     this.load();
     this.checkCardsLength();
 
-    const cards = document.querySelectorAll(".column__card");
+    const cards = this.element.querySelectorAll(".column__card");
     cards.forEach((card) => {
       this.onMouseEnterEventListener(card);
       this.onMouseLeaveEventListener(card);
@@ -20,9 +20,9 @@ export default class ToDoList {
   }
 
   onMouseEnterEventListener(card) {
-    card.onmouseenter = () => {
-      if (document.querySelector(".close")) {
-        document.querySelector(".close").remove();
+    card.addEventListener("mouseenter", () => {
+      if (this.element.querySelector(".close")) {
+        this.element.querySelector(".close").remove();
       }
 
       const closeBtn = document.createElement("button");
@@ -32,188 +32,157 @@ export default class ToDoList {
 
       card.append(closeBtn);
 
-      closeBtn.addEventListener("click", () => {
-        closeBtn.closest(".column__card").remove();
-        this.save();
-        this.checkCardsLength();
-      });
-    };
+      this.removeCardEventListener(closeBtn);
+    });
+  }
+
+  removeCardEventListener(btn) {
+    btn.addEventListener("click", () => {
+      btn.closest(".column__card").remove();
+      this.save();
+      this.checkCardsLength();
+    });
   }
 
   onMouseLeaveEventListener(card) {
-    card.onmouseleave = (e) => {
+    card.addEventListener("mouseleave", (e) => {
       const relatedTarget = e.relatedTarget;
       if (relatedTarget !== null && relatedTarget.classList[0] !== "close") {
-        document.querySelector(".close").remove();
+        this.element.querySelector(".close").remove();
       } else {
         return;
       }
-    };
+    });
   }
 
   dragEventListener() {
-    const cardsLists = document.querySelectorAll(".column__cards");
+    this.element.addEventListener("mousedown", (e) => {
+      e.preventDefault();
+      this.mouseDown(e);
+    });
 
-    let actualElement;
+    this.element.addEventListener("mousemove", (e) => {
+      e.preventDefault();
+      this.mouseMove(e);
+    });
 
-    const onMouseOver = (e) => {
-      const mouseOverItem = e.target;
-
-      if (mouseOverItem.classList.contains("column__card")) {
-        mouseOverItem.style.marginBottom = actualElement.offsetHeight + "px";
-      }
-
-      actualElement.style.left = `${event.pageX - this.coordX}px`;
-      actualElement.style.top = `${event.pageY - this.coordY}px`;
-    };
-
-    const onMouseOut = (e) => {
-      const mouseOutItem = e.target;
-
-      if (mouseOutItem.classList.contains("column__card")) {
-        mouseOutItem.style.removeProperty("margin-bottom");
-      }
-    };
-
-    const onMouseUp = (e) => {
-      if (e.button !== 2 && e.target.classList.contains("close") !== true) {
-        const mouseUpItem = e.target;
-
-        if (mouseUpItem.classList.contains("column__card")) {
-          mouseUpItem.before(actualElement);
-        } else if (mouseUpItem.classList.contains("no-cards-text")) {
-          mouseUpItem.nextElementSibling.append(actualElement);
-
-          mouseUpItem.remove();
-        } else {
-          const actualElementParent = actualElement.closest(".column");
-
-          if (
-            actualElementParent.querySelectorAll(".column__card").length - 1 ===
-            0
-          ) {
-            actualElementParent.querySelector(".no-cards-text").remove();
-          }
-        }
-
-        document.querySelector(".main").removeAttribute("style");
-        actualElement.classList.remove("column__card--dragged");
-        actualElement.style.removeProperty("width");
-        actualElement.style.removeProperty("top");
-        actualElement.style.removeProperty("left");
-
-        actualElement = undefined;
-
-        this.save();
-
-        document.documentElement.removeEventListener("mouseup", onMouseUp);
-        document.documentElement.removeEventListener("mouseover", onMouseOver);
-        document.documentElement.addEventListener("mouseout", onMouseOut);
-      }
-    };
-
-    cardsLists.forEach((cardsList) => {
-      cardsList.addEventListener("mousedown", (e) => {
-        if (e.button !== 2 && e.target.classList.contains("close") !== true) {
-          e.preventDefault();
-          actualElement = e.target;
-
-          document.querySelector(".main").style.cursor = "grabbing";
-          const cardWidth = actualElement.offsetWidth;
-
-          actualElement.classList.add("column__card--dragged");
-
-          const { left, top } = actualElement.getBoundingClientRect();
-          actualElement.style.width = cardWidth + "px";
-          actualElement.style.top = top + "px";
-          actualElement.style.left = left + "px";
-
-          this.coordX = event.pageX - left;
-          this.coordY = event.pageY - top;
-
-          if (
-            actualElement
-              .closest(".column__cards")
-              .querySelectorAll(".column__card").length -
-              1 ===
-            0
-          ) {
-            const actualElementParent = actualElement.closest(".column");
-
-            if (actualElementParent.querySelector(".no-cards-text")) {
-              actualElementParent.querySelector(".no-cards-text").remove();
-            }
-
-            const text = document.createElement("span");
-            text.classList.add("no-cards-text");
-            text.textContent = `You have no cards in your "${
-              actualElementParent.querySelector(".column__title").textContent
-            }" list. You can create one by clicking the "Add another card" button below.`;
-
-            actualElementParent.querySelector(".column__title").after(text);
-          }
-
-          document.documentElement.addEventListener("mouseup", onMouseUp);
-          document.documentElement.addEventListener("mouseover", onMouseOver);
-          document.documentElement.addEventListener("mouseout", onMouseOut);
-        }
-      });
+    this.element.addEventListener("mouseup", (e) => {
+      e.preventDefault();
+      this.mouseUp(e);
     });
   }
 
-  removeAllCardsEventListener() {
-    const clearBtn = document.querySelector(".top__clear");
+  mouseDown(e) {
+    if (e.button === 2 || e.target.classList.contains("close") === true) {
+      return;
+    }
 
-    clearBtn.addEventListener("click", () => {
-      this.clearAllCards();
-      const data = {
-        toDo: [],
-        inProgress: [],
-        done: [],
-      };
+    this.draggedCard = e.target.closest(".column__card");
+    if (!this.draggedCard) {
+      return;
+    }
 
-      this.listStorage.save(data);
+    this.ghostCard = this.draggedCard.cloneNode(true);
+    this.ghostCard.classList.add("column__card--dragged");
+    this.draggedCard.classList.add("transparent");
+
+    const { width, height, left, top } =
+      this.draggedCard.getBoundingClientRect();
+    this.ghostCard.style.width = width + "px";
+    this.ghostCard.style.height = height + "px";
+    this.ghostCard.style.top = top + "px";
+    this.ghostCard.style.left = left + "px";
+
+    document.body.appendChild(this.ghostCard);
+
+    this.element.style.cursor = "grabbing";
+
+    this.ghostCardX = e.pageX - left;
+    this.ghostCardY = e.pageY - top;
+
+    if (
+      this.draggedCard
+        .closest(".column__cards")
+        .querySelectorAll(".column__card").length -
+        1 ===
+      0
+    ) {
       this.checkCardsLength();
 
-      if (document.querySelector(".form")) {
-        document.querySelector(".form").remove();
+      this.createNoCardText(this.draggedCard.closest(".column"));
 
-        const addBtns = document.querySelectorAll(".column__btn");
-
-        addBtns.forEach((el) => {
-          el.classList.remove("column__btn--hidden");
-        });
-      }
-    });
+      this.draggedCard.classList.add("column__card--hidden");
+    }
   }
 
-  checkCardsLength() {
-    const columns = document.querySelectorAll(".column");
+  mouseMove(e) {
+    if (!this.ghostCard) {
+      return;
+    }
 
-    columns.forEach((column) => {
-      if (column.querySelectorAll(".column__card").length === 0) {
-        if (column.querySelector(".no-cards-text")) {
-          column.querySelector(".no-cards-text").remove();
-        }
+    this.ghostCard.style.left = e.pageX - this.ghostCardX + "px";
+    this.ghostCard.style.top = e.pageY - this.ghostCardY + "px";
 
-        const text = document.createElement("span");
-        text.classList.add("no-cards-text");
-        text.textContent = `You have no cards in your "${
-          column.querySelector(".column__title").textContent
-        }" list. You can create one by clicking the "Add another card" button below.`;
+    const target = document.elementFromPoint(e.clientX, e.clientY);
+    const column = document
+      .elementFromPoint(e.clientX, e.clientY)
+      .closest(".column");
+    const { height, top } = this.draggedCard.getBoundingClientRect();
+    const closestCard = document
+      .elementFromPoint(e.clientX, e.clientY)
+      .closest(".column__card");
 
-        column.querySelector(".column__title").after(text);
+    if (!closestCard && target.classList.contains("no-cards-text")) {
+      column
+        .querySelector(".no-cards-text")
+        .nextElementSibling.append(this.draggedCard);
+      this.draggedCard.classList.add("column__card--hidden");
+    } else if (closestCard) {
+      if (e.pageY < top - height / 2) {
+        closestCard.before(this.draggedCard);
+      } else {
+        closestCard.after(this.draggedCard);
       }
-    });
+
+      this.draggedCard.classList.remove("column__card--hidden");
+    }
+  }
+
+  mouseUp(e) {
+    if (e.button === 2 || !this.draggedCard) {
+      return;
+    }
+
+    this.element.removeAttribute("style");
+
+    if (
+      this.draggedCard
+        .closest(".column__cards")
+        .querySelectorAll(".column__card").length -
+        1 ===
+      0
+    ) {
+      this.checkCardsLength();
+
+      this.draggedCard.classList.remove("column__card--hidden");
+    }
+
+    this.ghostCard.classList.remove("column__card--dragged");
+    this.draggedCard.classList.remove("transparent");
+    this.ghostCard.remove();
+
+    this.ghostCard = undefined;
+    this.draggedCard = undefined;
+    this.save();
   }
 
   addCardEventListener() {
-    const addBtns = document.querySelectorAll(".column__btn");
+    const addBtns = this.element.querySelectorAll(".column__btn");
 
     addBtns.forEach((btn) => {
       btn.addEventListener("click", () => {
-        if (document.querySelector(".form")) {
-          document.querySelector(".form").remove();
+        if (this.element.querySelector(".form")) {
+          this.element.querySelector(".form").remove();
           addBtns.forEach((el) => {
             el.classList.remove("column__btn--hidden");
           });
@@ -223,11 +192,11 @@ export default class ToDoList {
         this.closeFormEventListener(addBtns);
 
         btn.classList.add("column__btn--hidden");
-        document.querySelector(".form__input").focus();
+        this.element.querySelector(".form__input").focus();
 
-        if (document.querySelector(".error")) {
-          document.querySelector(".error").remove();
-          document.querySelector(".form").removeAttribute("style");
+        if (this.element.querySelector(".error")) {
+          this.element.querySelector(".error").remove();
+          this.element.querySelector(".form").classList.remove("form--error");
         }
       });
     });
@@ -259,19 +228,17 @@ export default class ToDoList {
       this.save();
       textarea.focus();
 
-      if (form.closest(".column").querySelector(".no-cards-text")) {
-        form.closest(".column").querySelector(".no-cards-text").remove();
-      }
+      this.checkCardsLength();
     });
   }
 
   closeFormEventListener(addBtns) {
-    const removeFormBtn = document.querySelector(".form__close");
+    const removeFormBtn = this.element.querySelector(".form__close");
 
     removeFormBtn.addEventListener("click", () => {
-      if (document.querySelector(".error")) {
-        document.querySelector(".error").remove();
-        document.querySelector(".form").removeAttribute("style");
+      if (this.element.querySelector(".error")) {
+        this.element.querySelector(".error").remove();
+        this.element.querySelector(".form").classList.remove("form--error");
       }
 
       removeFormBtn.closest("form").remove();
@@ -284,20 +251,19 @@ export default class ToDoList {
 
   addCard(form, input) {
     if (input.value.length > 200) {
-      if (document.querySelector(".error")) {
-        document.querySelector(".error").remove();
+      if (this.element.querySelector(".error")) {
+        this.element.querySelector(".error").remove();
       }
 
       const charactersError = document.createElement("span");
       charactersError.classList.add("error");
-      charactersError.classList.add("characters-error");
       charactersError.textContent = `The card cannot be more than 200 characters long.`;
       const formColumn = form.closest(".column__wrapper");
       formColumn.append(charactersError);
-      form.style.marginBottom = "8px";
+      form.classList.add("form--error");
     } else if (input.value.trim() === "") {
-      if (document.querySelector(".error")) {
-        document.querySelector(".error").remove();
+      if (this.element.querySelector(".error")) {
+        this.element.querySelector(".error").remove();
       }
 
       const error = document.createElement("span");
@@ -305,7 +271,7 @@ export default class ToDoList {
       error.textContent = `The card cannot be empty.`;
       const formColumn = form.closest(".column__wrapper");
       formColumn.append(error);
-      form.style.marginBottom = "8px";
+      form.classList.add("form--error");
     } else {
       if (input.value.trim() != "") {
         const card = document.createElement("li");
@@ -322,9 +288,9 @@ export default class ToDoList {
         this.onMouseEnterEventListener(card);
         this.onMouseLeaveEventListener(card);
 
-        if (document.querySelector(".error")) {
-          document.querySelector(".error").remove();
-          document.querySelector(".form").removeAttribute("style");
+        if (this.element.querySelector(".error")) {
+          this.element.querySelector(".error").remove();
+          this.element.querySelector(".form").classList.remove("form--error");
         }
 
         input.value = "";
@@ -332,17 +298,55 @@ export default class ToDoList {
     }
   }
 
+  removeAllCardsEventListener() {
+    const clearBtn = document.querySelector(".top__clear");
+
+    clearBtn.addEventListener("click", () => {
+      this.clearAllCards();
+      const data = {
+        toDo: [],
+        inProgress: [],
+        done: [],
+      };
+
+      this.listStorage.save(data);
+      this.checkCardsLength();
+
+      if (this.element.querySelector(".form")) {
+        this.element.querySelector(".form").remove();
+
+        const addBtns = this.element.querySelectorAll(".column__btn");
+
+        addBtns.forEach((el) => {
+          el.classList.remove("column__btn--hidden");
+        });
+      }
+    });
+  }
+
+  clearAllCards() {
+    const cards = this.element.querySelectorAll(".column__card");
+
+    cards.forEach((card) => {
+      card.remove();
+    });
+  }
+
   save() {
     const toDoCards = Array.from(
-      document.querySelector(".column_to-do").querySelectorAll(".column__card"),
+      this.element
+        .querySelector(".column_to-do")
+        .querySelectorAll(".column__card"),
     );
     const inProgressCards = Array.from(
-      document
+      this.element
         .querySelector(".column_in-progress")
         .querySelectorAll(".column__card"),
     );
     const doneCards = Array.from(
-      document.querySelector(".column_done").querySelectorAll(".column__card"),
+      this.element
+        .querySelector(".column_done")
+        .querySelectorAll(".column__card"),
     );
 
     const data = {
@@ -382,7 +386,7 @@ export default class ToDoList {
         text.textContent = data;
 
         card.append(text);
-        document
+        this.element
           .querySelector(".column_to-do")
           .querySelector(".column__cards")
           .append(card);
@@ -397,7 +401,7 @@ export default class ToDoList {
         text.textContent = data;
 
         card.append(text);
-        document
+        this.element
           .querySelector(".column_in-progress")
           .querySelector(".column__cards")
           .append(card);
@@ -412,7 +416,7 @@ export default class ToDoList {
         text.textContent = data;
 
         card.append(text);
-        document
+        this.element
           .querySelector(".column_done")
           .querySelector(".column__cards")
           .append(card);
@@ -424,11 +428,32 @@ export default class ToDoList {
     }
   }
 
-  clearAllCards() {
-    const cards = document.querySelectorAll(".column__card");
+  checkCardsLength() {
+    const columns = this.element.querySelectorAll(".column");
 
-    cards.forEach((card) => {
-      card.remove();
+    columns.forEach((column) => {
+      if (column.querySelectorAll(".column__card").length !== 0) {
+        if (column.querySelector(".no-cards-text")) {
+          column.querySelector(".no-cards-text").remove();
+        }
+        return;
+      } else {
+        this.createNoCardText(column);
+      }
     });
+  }
+
+  createNoCardText(column) {
+    if (column.querySelector(".no-cards-text")) {
+      column.querySelector(".no-cards-text").remove();
+    }
+
+    const text = document.createElement("span");
+    text.classList.add("no-cards-text");
+    text.textContent = `You have no cards in your "${
+      column.querySelector(".column__title").textContent
+    }" list. You can create one by clicking the "Add another card" button below.`;
+
+    column.querySelector(".column__title").after(text);
   }
 }

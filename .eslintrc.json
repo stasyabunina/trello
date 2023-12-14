@@ -12,6 +12,7 @@
   "rules": {
     "no-unused-vars": "warn"
   },
+  "parser": "@babel/eslint-parser",
   "overrides": [
     {
       "files": ["**/*.test.js"],
