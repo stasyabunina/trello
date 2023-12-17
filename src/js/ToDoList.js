@@ -21,19 +21,44 @@ export default class ToDoList {
 
   onMouseEnterEventListener(card) {
     card.addEventListener("mouseenter", () => {
-      if (this.element.querySelector(".close")) {
-        this.element.querySelector(".close").remove();
+      this.createCardBtns(card);
+
+      if (this.element.querySelector('.column__edit-form')) {
+        const editFormBtn = this.element.querySelector('.column__edit-form').closest('.column__card').querySelector('.column__card-edit');
+        if (!editFormBtn) {
+          return;
+        }
+        editFormBtn.classList.add('hidden');
       }
-
-      const closeBtn = document.createElement("button");
-      closeBtn.classList.add("close");
-      closeBtn.innerHTML = "&#10006;";
-      closeBtn.type = "button";
-
-      card.append(closeBtn);
-
-      this.removeCardEventListener(closeBtn);
     });
+  }
+
+  createCardBtns(card) {
+    if (this.element.querySelector(".column__card-btns")) {
+      this.element.querySelector(".column__card-btns").remove();
+    }
+
+    const columnBtns = document.createElement("div");
+    columnBtns.classList.add('column__card-btns');
+
+    const closeBtn = document.createElement("button");
+    closeBtn.classList.add("column__card-close");
+    closeBtn.innerHTML = "&#10006;";
+    closeBtn.type = "button";
+
+    const editBtn = document.createElement("button");
+    editBtn.classList.add("column__card-edit");
+    editBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="100" height="100" viewBox="0 0 32 32">
+    <path d="M 23.90625 3.96875 C 22.859375 3.96875 21.8125 4.375 21 5.1875 L 5.1875 21 L 5.125 21.3125 L 4.03125 26.8125 L 3.71875 28.28125 L 5.1875 27.96875 L 10.6875 26.875 L 11 26.8125 L 26.8125 11 C 28.4375 9.375 28.4375 6.8125 26.8125 5.1875 C 26 4.375 24.953125 3.96875 23.90625 3.96875 Z M 23.90625 5.875 C 24.410156 5.875 24.917969 6.105469 25.40625 6.59375 C 26.378906 7.566406 26.378906 8.621094 25.40625 9.59375 L 24.6875 10.28125 L 21.71875 7.3125 L 22.40625 6.59375 C 22.894531 6.105469 23.402344 5.875 23.90625 5.875 Z M 20.3125 8.71875 L 23.28125 11.6875 L 11.1875 23.78125 C 10.53125 22.5 9.5 21.46875 8.21875 20.8125 Z M 6.9375 22.4375 C 8.136719 22.921875 9.078125 23.863281 9.5625 25.0625 L 6.28125 25.71875 Z"></path>
+    </svg>`;
+    editBtn.type = "button";
+
+    card.append(columnBtns);
+    columnBtns.append(editBtn);
+    columnBtns.append(closeBtn);
+
+    this.removeCardEventListener(closeBtn);
+    this.editCardEventListener(editBtn);
   }
 
   removeCardEventListener(btn) {
@@ -44,11 +69,69 @@ export default class ToDoList {
     });
   }
 
+  editCardEventListener(btn) {
+    btn.addEventListener("click", () => {
+      if (this.element.querySelector('.column__edit-form')) {
+        this.element.querySelector('.column__edit-form').previousElementSibling.classList.remove('hidden');
+        this.element.querySelector('.column__edit-form').remove();
+      }
+      this.createEditForm(btn);
+      btn.closest(".column__card").querySelector('.column__text').classList.add('hidden');
+      btn.classList.add('hidden');
+
+      if (this.element.querySelector('.form')) {
+        this.element.querySelector('.form').previousElementSibling.classList.remove('hidden');
+        this.element.querySelector('.form').remove();
+      }
+
+      btn.classList.add('hidden');
+    });
+  }
+
+  createEditForm(btn) {
+    const form = document.createElement("form");
+    form.classList.add('column__edit-form');
+
+    const input = document.createElement("textarea");
+    input.classList.add('column__edit-input');
+    form.append(input);
+    input.value = btn.closest(".column__card").querySelector('.column__text').textContent;
+
+    const editBtn = document.createElement("button");
+    editBtn.textContent = 'Edit card';
+    editBtn.classList.add('column__edit-btn');
+    form.append(editBtn);
+
+    const closeBtn = document.createElement("button");
+    closeBtn.innerHTML = '&#10006;';
+    closeBtn.classList.add('column__close-edit-form');
+    closeBtn.type = "button";
+    form.append(closeBtn);
+
+    btn.closest(".column__card").append(form);
+    input.focus();
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      form.closest(".column__card").querySelector('.column__text').textContent = input.value;
+      form.closest(".column__card").querySelector('.column__text').classList.remove('hidden');
+      btn.classList.remove('hidden');
+      this.save();
+      form.remove();
+    })
+
+    closeBtn.addEventListener('click', () => {
+      closeBtn.closest(".column__card").querySelector('.column__text').classList.remove('hidden');
+      btn.classList.remove('hidden');
+      form.remove();
+    })
+  }
+
   onMouseLeaveEventListener(card) {
     card.addEventListener("mouseleave", (e) => {
       const relatedTarget = e.relatedTarget;
-      if (relatedTarget !== null && relatedTarget.classList[0] !== "close") {
-        this.element.querySelector(".close").remove();
+      if (relatedTarget !== null && !relatedTarget.closest('.column__card')) {
+        this.element.querySelector(".column__card-btns").remove();
       } else {
         return;
       }
@@ -57,23 +140,29 @@ export default class ToDoList {
 
   dragEventListener() {
     this.element.addEventListener("mousedown", (e) => {
-      e.preventDefault();
-      this.mouseDown(e);
+      if (this.element.querySelector('.column__edit-form') === null) {
+        e.preventDefault();
+        this.mouseDown(e);
+      }
     });
 
     this.element.addEventListener("mousemove", (e) => {
-      e.preventDefault();
-      this.mouseMove(e);
+      if (this.element.querySelector('.column__edit-form') === null) {
+        e.preventDefault();
+        this.mouseMove(e);
+      }
     });
 
     this.element.addEventListener("mouseup", (e) => {
-      e.preventDefault();
-      this.mouseUp(e);
+      if (this.element.querySelector('.column__edit-form') === null) {
+        e.preventDefault();
+        this.mouseUp(e);
+      }
     });
   }
 
   mouseDown(e) {
-    if (e.button === 2 || e.target.classList.contains("close") === true) {
+    if (e.button === 2 || e.target.closest('.column__card-btns')) {
       return;
     }
 
@@ -104,14 +193,14 @@ export default class ToDoList {
       this.draggedCard
         .closest(".column__cards")
         .querySelectorAll(".column__card").length -
-        1 ===
+      1 ===
       0
     ) {
       this.checkCardsLength();
 
       this.createNoCardText(this.draggedCard.closest(".column"));
 
-      this.draggedCard.classList.add("column__card--hidden");
+      this.draggedCard.classList.add("hidden");
     }
   }
 
@@ -136,7 +225,7 @@ export default class ToDoList {
       column
         .querySelector(".no-cards-text")
         .nextElementSibling.append(this.draggedCard);
-      this.draggedCard.classList.add("column__card--hidden");
+      this.draggedCard.classList.add("hidden");
     } else if (closestCard) {
       if (e.pageY < top - height / 2) {
         closestCard.before(this.draggedCard);
@@ -144,7 +233,7 @@ export default class ToDoList {
         closestCard.after(this.draggedCard);
       }
 
-      this.draggedCard.classList.remove("column__card--hidden");
+      this.draggedCard.classList.remove("hidden");
     }
   }
 
@@ -159,12 +248,12 @@ export default class ToDoList {
       this.draggedCard
         .closest(".column__cards")
         .querySelectorAll(".column__card").length -
-        1 ===
+      1 ===
       0
     ) {
       this.checkCardsLength();
 
-      this.draggedCard.classList.remove("column__card--hidden");
+      this.draggedCard.classList.remove("hidden");
     }
 
     this.ghostCard.classList.remove("column__card--dragged");
@@ -184,19 +273,24 @@ export default class ToDoList {
         if (this.element.querySelector(".form")) {
           this.element.querySelector(".form").remove();
           addBtns.forEach((el) => {
-            el.classList.remove("column__btn--hidden");
+            el.classList.remove("hidden");
           });
         }
 
         this.createForm(btn);
         this.closeFormEventListener(addBtns);
 
-        btn.classList.add("column__btn--hidden");
+        btn.classList.add("hidden");
         this.element.querySelector(".form__input").focus();
 
         if (this.element.querySelector(".error")) {
           this.element.querySelector(".error").remove();
           this.element.querySelector(".form").classList.remove("form--error");
+        }
+
+        if (this.element.querySelector('.column__edit-form')) {
+          this.element.querySelector('.column__edit-form').previousElementSibling.classList.remove('hidden');
+          this.element.querySelector('.column__edit-form').remove();
         }
       });
     });
@@ -244,7 +338,7 @@ export default class ToDoList {
       removeFormBtn.closest("form").remove();
 
       addBtns.forEach((el) => {
-        el.classList.remove("column__btn--hidden");
+        el.classList.remove("hidden");
       });
     });
   }
@@ -318,7 +412,7 @@ export default class ToDoList {
         const addBtns = this.element.querySelectorAll(".column__btn");
 
         addBtns.forEach((el) => {
-          el.classList.remove("column__btn--hidden");
+          el.classList.remove("hidden");
         });
       }
     });
@@ -450,9 +544,8 @@ export default class ToDoList {
 
     const text = document.createElement("span");
     text.classList.add("no-cards-text");
-    text.textContent = `You have no cards in your "${
-      column.querySelector(".column__title").textContent
-    }" list. You can create one by clicking the "Add another card" button below.`;
+    text.textContent = `You have no cards in your "${column.querySelector(".column__title").textContent
+      }" list. You can create one by clicking the "Add another card" button below.`;
 
     column.querySelector(".column__title").after(text);
   }

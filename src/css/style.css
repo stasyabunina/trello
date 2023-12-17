@@ -11,6 +11,17 @@ body {
   justify-content: center;
 }
 
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  border: 0;
+  clip: rect(0 0 0 0);
+  overflow: hidden;
+}
+
 .container {
   max-width: 1080px;
   padding: 0 50px;
@@ -27,6 +38,14 @@ body {
 
 .top {
   margin-bottom: 60px;
+}
+
+.rights {
+  color: #FFB9DC;
+}
+
+.rights a {
+  color: #FFB9DC;
 }
 
 .top__text {
@@ -58,6 +77,7 @@ body {
 .columns {
   width: 100%;
   margin: 0;
+  margin-bottom: 35px;
   padding: 0;
   list-style-type: none;
   display: flex;
@@ -96,15 +116,11 @@ body {
   list-style-type: none;
 }
 
-.transparent {
-  opacity: 0;
-}
-
 .column__card {
   display: block;
   position: relative;
   margin-bottom: 10px;
-  padding: 10px 40px 10px 10px;
+  padding: 10px 55px 10px 10px;
   background-color: white;
   border-radius: 5px;
   transition: transform .1s ease-in-out, margin-bottom .1s ease-in-out;
@@ -121,16 +137,65 @@ body {
   pointer-events: none;
 }
 
-.column__card.column__card--hidden {
-  display: none;
-}
-
 .column__text {
   display: inline-block;
   margin: 0;
   font-size: 15px;
   pointer-events: none;
   word-break: break-all;
+}
+
+.column__edit-form {
+  width: 100%;
+}
+
+.column__close-edit-form {
+  width: 30px;
+  height: 30px;
+  display: inline-flex;
+  justify-content: center;
+  vertical-align: middle;
+  border: none;
+  padding: 0;
+  background-color: transparent;
+  cursor: pointer;
+  color: gray;
+  font-size: 20px;
+}
+
+.column__edit-btn {
+  margin-right: 5px;
+  padding: 8px 11px;
+  display: inline-flex;
+  text-align: center;
+  font-weight: 600;
+  font-size: 15px;
+  border: none;
+  border-radius: 3px;
+  color: black;
+  background-color: #eaeaea;
+  cursor: pointer;
+  vertical-align: middle;
+}
+
+.column__edit-input {
+  width: 100%;
+  margin-bottom: 7px;
+  padding: 10px;
+  border: none;
+  border-radius: 3px;
+  font-size: 15px;
+  font-family: inherit;
+  background-color: whitesmoke;
+  resize: none;
+}
+
+.column__edit-input::placeholder {
+  font-family: inherit;
+}
+
+.column__edit-input:focus-visible {
+  outline: none;
 }
 
 .column__btn {
@@ -146,10 +211,6 @@ body {
   text-decoration: underline;
 }
 
-.column__btn--hidden {
-  display: none;
-}
-
 .plus {
   margin-right: 5px;
   font-size: 19px;
@@ -159,22 +220,53 @@ body {
   text-decoration: none;
 }
 
-.close {
+.column__card-btns {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 5px;
+  right: 1.5%;
+}
+
+.column__card-close {
   width: 20px;
   height: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 0;
-  position: absolute;
-  top: 5%;
-  right: 1%;
   background-color: whitesmoke;
   color: gray;
   border: none;
   border-radius: 3px;
   font-size: 12px;
   cursor: pointer;
+}
+
+.column__card-edit {
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  background-color: whitesmoke;
+  color: gray;
+  border: none;
+  border-radius: 3px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.column__card-edit svg {
+  width: 14px;
+  height: 14px;
+}
+
+.column__card-edit svg path {
+  fill: gray;
 }
 
 .form {
@@ -248,4 +340,12 @@ body {
   font-size: 15px;
   color: #B7B7B7;
   text-align: center;
+}
+
+.transparent {
+  opacity: 0;
+}
+
+.hidden {
+  display: none;
 }
