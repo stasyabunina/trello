@@ -23,12 +23,15 @@ export default class ToDoList {
     card.addEventListener("mouseenter", () => {
       this.createCardBtns(card);
 
-      if (this.element.querySelector('.column__edit-form')) {
-        const editFormBtn = this.element.querySelector('.column__edit-form').closest('.column__card').querySelector('.column__card-edit');
+      if (this.element.querySelector(".column__edit-form")) {
+        const editFormBtn = this.element
+          .querySelector(".column__edit-form")
+          .closest(".column__card")
+          .querySelector(".column__card-edit");
         if (!editFormBtn) {
           return;
         }
-        editFormBtn.classList.add('hidden');
+        editFormBtn.classList.add("hidden");
       }
     });
   }
@@ -39,7 +42,7 @@ export default class ToDoList {
     }
 
     const columnBtns = document.createElement("div");
-    columnBtns.classList.add('column__card-btns');
+    columnBtns.classList.add("column__card-btns");
 
     const closeBtn = document.createElement("button");
     closeBtn.classList.add("column__card-close");
@@ -71,40 +74,49 @@ export default class ToDoList {
 
   editCardEventListener(btn) {
     btn.addEventListener("click", () => {
-      if (this.element.querySelector('.column__edit-form')) {
-        this.element.querySelector('.column__edit-form').previousElementSibling.classList.remove('hidden');
-        this.element.querySelector('.column__edit-form').remove();
+      if (this.element.querySelector(".column__edit-form")) {
+        this.element
+          .querySelector(".column__edit-form")
+          .previousElementSibling.classList.remove("hidden");
+        this.element.querySelector(".column__edit-form").remove();
       }
       this.createEditForm(btn);
-      btn.closest(".column__card").querySelector('.column__text').classList.add('hidden');
-      btn.classList.add('hidden');
+      btn
+        .closest(".column__card")
+        .querySelector(".column__text")
+        .classList.add("hidden");
+      btn.classList.add("hidden");
 
-      if (this.element.querySelector('.form')) {
-        this.element.querySelector('.form').previousElementSibling.classList.remove('hidden');
-        this.element.querySelector('.form').remove();
+      if (this.element.querySelector(".form")) {
+        this.element
+          .querySelector(".form")
+          .previousElementSibling.classList.remove("hidden");
+        this.element.querySelector(".form").remove();
       }
 
-      btn.classList.add('hidden');
+      btn.classList.add("hidden");
     });
   }
 
   createEditForm(btn) {
     const form = document.createElement("form");
-    form.classList.add('column__edit-form');
+    form.classList.add("column__edit-form");
 
     const input = document.createElement("textarea");
-    input.classList.add('column__edit-input');
+    input.classList.add("column__edit-input");
     form.append(input);
-    input.value = btn.closest(".column__card").querySelector('.column__text').textContent;
+    input.value = btn
+      .closest(".column__card")
+      .querySelector(".column__text").textContent;
 
     const editBtn = document.createElement("button");
-    editBtn.textContent = 'Edit card';
-    editBtn.classList.add('column__edit-btn');
+    editBtn.textContent = "Edit card";
+    editBtn.classList.add("column__edit-btn");
     form.append(editBtn);
 
     const closeBtn = document.createElement("button");
-    closeBtn.innerHTML = '&#10006;';
-    closeBtn.classList.add('column__close-edit-form');
+    closeBtn.innerHTML = "&#10006;";
+    closeBtn.classList.add("column__close-edit-form");
     closeBtn.type = "button";
     form.append(closeBtn);
 
@@ -113,24 +125,31 @@ export default class ToDoList {
 
     form.addEventListener("submit", (e) => {
       e.preventDefault();
-      form.closest(".column__card").querySelector('.column__text').textContent = input.value;
-      form.closest(".column__card").querySelector('.column__text').classList.remove('hidden');
-      btn.classList.remove('hidden');
+      form.closest(".column__card").querySelector(".column__text").textContent =
+        input.value;
+      form
+        .closest(".column__card")
+        .querySelector(".column__text")
+        .classList.remove("hidden");
+      btn.classList.remove("hidden");
       this.save();
       form.remove();
-    })
+    });
 
-    closeBtn.addEventListener('click', () => {
-      closeBtn.closest(".column__card").querySelector('.column__text').classList.remove('hidden');
-      btn.classList.remove('hidden');
+    closeBtn.addEventListener("click", () => {
+      closeBtn
+        .closest(".column__card")
+        .querySelector(".column__text")
+        .classList.remove("hidden");
+      btn.classList.remove("hidden");
       form.remove();
-    })
+    });
   }
 
   onMouseLeaveEventListener(card) {
     card.addEventListener("mouseleave", (e) => {
       const relatedTarget = e.relatedTarget;
-      if (relatedTarget !== null && !relatedTarget.closest('.column__card')) {
+      if (relatedTarget !== null && !relatedTarget.closest(".column__card")) {
         this.element.querySelector(".column__card-btns").remove();
       } else {
         return;
@@ -140,21 +159,21 @@ export default class ToDoList {
 
   dragEventListener() {
     this.element.addEventListener("mousedown", (e) => {
-      if (this.element.querySelector('.column__edit-form') === null) {
+      if (this.element.querySelector(".column__edit-form") === null) {
         e.preventDefault();
         this.mouseDown(e);
       }
     });
 
     this.element.addEventListener("mousemove", (e) => {
-      if (this.element.querySelector('.column__edit-form') === null) {
+      if (this.element.querySelector(".column__edit-form") === null) {
         e.preventDefault();
         this.mouseMove(e);
       }
     });
 
     this.element.addEventListener("mouseup", (e) => {
-      if (this.element.querySelector('.column__edit-form') === null) {
+      if (this.element.querySelector(".column__edit-form") === null) {
         e.preventDefault();
         this.mouseUp(e);
       }
@@ -162,7 +181,7 @@ export default class ToDoList {
   }
 
   mouseDown(e) {
-    if (e.button === 2 || e.target.closest('.column__card-btns')) {
+    if (e.button === 2 || e.target.closest(".column__card-btns")) {
       return;
     }
 
@@ -193,7 +212,7 @@ export default class ToDoList {
       this.draggedCard
         .closest(".column__cards")
         .querySelectorAll(".column__card").length -
-      1 ===
+        1 ===
       0
     ) {
       this.checkCardsLength();
@@ -248,7 +267,7 @@ export default class ToDoList {
       this.draggedCard
         .closest(".column__cards")
         .querySelectorAll(".column__card").length -
-      1 ===
+        1 ===
       0
     ) {
       this.checkCardsLength();
@@ -288,9 +307,11 @@ export default class ToDoList {
           this.element.querySelector(".form").classList.remove("form--error");
         }
 
-        if (this.element.querySelector('.column__edit-form')) {
-          this.element.querySelector('.column__edit-form').previousElementSibling.classList.remove('hidden');
-          this.element.querySelector('.column__edit-form').remove();
+        if (this.element.querySelector(".column__edit-form")) {
+          this.element
+            .querySelector(".column__edit-form")
+            .previousElementSibling.classList.remove("hidden");
+          this.element.querySelector(".column__edit-form").remove();
         }
       });
     });
@@ -544,8 +565,9 @@ export default class ToDoList {
 
     const text = document.createElement("span");
     text.classList.add("no-cards-text");
-    text.textContent = `You have no cards in your "${column.querySelector(".column__title").textContent
-      }" list. You can create one by clicking the "Add another card" button below.`;
+    text.textContent = `You have no cards in your "${
+      column.querySelector(".column__title").textContent
+    }" list. You can create one by clicking the "Add another card" button below.`;
 
     column.querySelector(".column__title").after(text);
   }
