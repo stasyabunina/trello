@@ -1,0 +1,430 @@
+.manager {
+  &__columns {
+    height: 100%;
+  }
+
+  &__column {
+    height: auto;
+    width: calc(100% / 3 - 14px);
+    display: flex;
+    padding: 15px;
+    background-color: #f3f5f7;
+    border-radius: 7px;
+    margin-bottom: 20px;
+  }
+}
+
+.column {
+  &__wrapper {
+    width: 100%;
+    height: 100%;
+  }
+
+  &__title-remove-wrapper {
+    @include flex-row;
+    justify-content: space-between;
+    margin-bottom: 15px;
+  }
+
+  &__btn {
+    @include flex-row;
+    color: rgba(130, 130, 130, 0.719);
+    transition: color .1s ease-in-out;
+
+    &:focus-visible {
+      color: $color_primary;
+    }
+
+    &:hover {
+      color: $color_primary;
+    }
+  }
+
+  .plus {
+    margin-right: 8px;
+    font-size: 28px;
+  }
+
+  &__add-column-form {
+    @include flex-row;
+  }
+
+  &__add-column-btn {
+    margin-right: 12px;
+    outline: none;
+
+    &:focus-visible {
+      span {
+        border-color: $color_primary;
+      }
+      outline: none;
+    }
+
+    &:hover {
+      span {
+        border-color: $color_primary;
+      }
+    }
+
+    span {
+      display: block;
+      width: 11px;
+      height: 6px;
+      border-bottom: 3px solid black;
+      border-left: 3px solid black;
+      transform: rotate(-50deg);
+      transition: border-color .1s ease-in-out;
+    }
+  }
+
+  &__edit-card-form {
+    margin-bottom: 15px;
+  }
+
+  &__edit-card-label {
+    width: 100%;
+    margin-bottom: 10px;
+    @include flex-column;
+  }
+
+  &__edit-card-input {
+    width: 100%;
+    min-height: 100px;
+    border-radius: 5px;
+    padding: 13px;
+    outline: none;
+    border: none;
+    background-color: whitesmoke;
+    resize: none;
+
+    &::placeholder {
+      color: rgba(130, 130, 130, 0.719);
+    }
+  }
+
+  &__edit-card-btn {
+    padding: 10px 15px;
+    margin-right: 10px;
+    color: white;
+    font-weight: 600;
+    background-color: lightgray;
+  }
+
+  &__edit-card-cancel {
+    font-size: 38px;
+    transform: rotate(45deg);
+    color: rgba(130, 130, 130, 0.719);
+  }
+
+  &__edit-card-btns {
+    @include flex-row;
+  }
+
+  &__add-column-label {
+    width: 70%;
+    margin-right: 17px;
+    @include flex-column;
+    align-items: flex-start;
+  }
+
+  &__add-column-input {
+    width: 100%;
+    border-radius: 5px;
+    padding: 9px;
+    outline: none;
+    border: none;
+
+    &::placeholder {
+      color: rgba(130, 130, 130, 0.719);
+    }
+  }
+
+  &__cancel-column-btn {
+    font-size: 28px;
+    transform: rotate(45deg);
+    transition: color .1s ease-in-out;
+
+    &:focus-visible {
+      outline: none;
+      color: $color_primary;
+    }
+
+    &:hover {
+      color: $color_primary;
+    }
+  }
+
+  &__remove-btn {
+    width: 20px;
+    height: 20px;
+
+    svg {
+      width: 20px;
+      height: 20px;
+
+      path {
+        transition: stroke .1s ease-in-out;
+      }
+    }
+
+    &:focus-visible {
+      outline: none;
+      svg {
+        path {
+          stroke: $color_primary;
+        }
+      }
+    }
+
+    &:hover {
+      svg {
+        path {
+          stroke: $color_primary;
+        }
+      }
+    }
+  }
+
+  &__form {
+    width: 100%;
+  }
+
+  &__form-input {
+    padding: 15px;
+    width: 100%;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    resize: none;
+
+    &::placeholder {
+      color: rgba(130, 130, 130, 0.719);
+    }
+  }
+
+  &__add-card-btns {
+    @include flex-row;
+  }
+
+  &__add-card-btn {
+    padding: 10px 15px;
+    margin-right: 10px;
+    color: white;
+    font-weight: 600;
+    background-color: #5CA84D;
+  }
+
+  &__cancel-card-btn {
+    font-size: 38px;
+    transform: rotate(45deg);
+    color: rgba(130, 130, 130, 0.719);
+    transition: color .1s ease-in-out;
+
+    &:focus-visible {
+      color: $color_primary;
+      outline: none;
+    }
+
+    &:hover {
+      color: $color_primary;
+    }
+  }
+
+  &__title {
+    padding-left: 10px;
+    font-size: inherit;
+    font-weight: 600;
+  }
+
+  &__card {
+    position: relative;
+    @include flex-column;
+    align-items: flex-start;
+    padding: 12px;
+    margin-bottom: 15px;
+    background-color: white;
+    border-radius: 5px;
+    border-bottom: 1px solid rgb(211, 211, 211);
+    cursor: grab;
+
+    &:last-child {
+      margin-bottom: 25px;
+    }
+
+    &--dragged {
+      position: absolute;
+      transform: scale(1.1) rotate(5deg);
+      z-index: 200;
+      pointer-events: none;
+      user-select: none;
+    }
+  }
+
+  &__text {
+    cursor: auto;
+  }
+
+  &__form-tag-content {
+    padding: 7px 13px;
+    @include flex-row;
+    cursor: pointer;
+  }
+
+  &__form-tags {
+    @include flex-row;
+    flex-wrap: wrap;
+    margin-bottom: 4px;
+  }
+
+  &__form-tag-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: white;
+  }
+
+  &__form-tag {
+    margin-right: 7px;
+    margin-bottom: 7px;
+    border-radius: 5px;
+    background-color: lightgray;
+    transition: background-color .1s ease-in-out;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  &__tags {
+    @include flex-row;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+  }
+
+  &__tag {
+    height: 13px;
+    width: 45px;
+    border-radius: 8px;
+    background-color: lightgray;
+    margin-right: 7px;
+    overflow: hidden;
+    cursor: auto;
+
+    &--opened {
+      height: auto;
+      width: auto;
+      padding: 1px 13px;
+      border-radius: 5px;
+    }
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  &__tag-content {
+    @include flex-row;
+  }
+
+  &__tag-name {
+    margin-right: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    color: white;
+  }
+
+  &__tag-btn {
+    font-size: 28px;
+    color: white;
+    transform: rotate(45deg);
+  }
+
+  &__text {
+    margin-bottom: 15px;
+  }
+
+  &__menu-btn {
+    width: 21px;
+    height: 21px;
+
+    svg {
+      width: 21px;
+      height: 21px;
+      transform: rotate(180deg);
+
+      path {
+        transition: stroke .1s ease-in-out;
+      }
+    }
+
+    &:focus-visible {
+      outline: none;
+      svg {
+        path {
+          fill: $color_primary;
+        }
+      }
+    }
+
+    &:hover {
+      svg {
+        path {
+          stroke: $color_primary;
+        }
+      }
+    }
+  }
+
+  &__menu {
+    @include menu;
+    box-shadow: 1px 0px 23px -5px rgba(34, 60, 80, 0.142);
+
+    &--shown {
+      animation: open .15s ease-in-out;
+    }
+
+    &--hidden {
+      animation: close .15s ease-in-out;
+    }
+  }
+
+  &__menu-item {
+    border-bottom: 1px solid rgb(209, 209, 209);
+    background-color: white;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  &__menu-item-btn {
+    padding: 13px 15px;
+    width: 100%;
+    border-radius: 0;
+    text-align: left;
+    color: black;
+  }
+}
+
+@keyframes open {
+  0% {
+    transform: scale(0.8) translate(-50px, -20px);
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1) translate(0, 0);
+  }
+}
+
+@keyframes close {
+  0% {
+    opacity: 1;
+    transform: scale(1) translate(0, 0);
+  }
+
+  100% {
+    transform: scale(0.8) translate(-50px, -20px);
+    opacity: 0;
+  }
+}

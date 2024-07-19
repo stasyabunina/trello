@@ -1,0 +1,51 @@
+@media (max-width: 968px) {
+  .manager {
+    &__column {
+      width: calc(50% - 10px);
+      margin-bottom: 15px;
+    }
+  }
+
+  .container {
+    padding: 0 40px;
+  }
+}
+
+@media (max-width: 668px) {
+  .manager {
+    &__column {
+      width: 100%;
+      margin-bottom: 15px;
+    }
+  }
+
+  .container {
+    padding: 0 30px;
+  }
+}
+
+@media (max-width: 576px) {
+  .header {
+    &__tag-menu {
+      max-width: 250px;
+    }
+
+    &__name {
+      display: none;
+    }
+
+    &__tag-form {
+      flex-wrap: wrap;
+    }
+
+    &__tag-name-input {
+      width: 100%;
+      margin-right: 0;
+      margin-bottom: 7px;
+    }
+  }
+
+  .container {
+    padding: 0 15px;
+  }
+}
