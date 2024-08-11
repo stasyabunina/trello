@@ -39,7 +39,7 @@ const mouseDown = (e) => {
   document.querySelectorAll('.column__card').forEach((card) => {
     card.style.cursor = 'grabbing';
   })
-  document.body.style.cursor = "grabbing";
+  document.body.classList.add('grabbing');
 
   ghostCardX = e.pageX - left;
   ghostCardY = e.pageY - document.documentElement.scrollTop - top;
@@ -86,31 +86,12 @@ const mouseMove = (e) => {
   }
 }
 
-const mouseScroll = (e) => {
-  if (!draggedCard) {
-    return;
-  }
-  // console.log(ghostCardY)
-  // ghostCard.style.top = ghostCardY + document.documentElement.scrollTop +  + "px";
-
-
-  // ghostCard.style.position = 'fixed';
-  // ghostCard.style.top = window.scrollY + ghostCard.clientHeight + "px";
-  // console.log(window.scrollY)
-  // ghostCard.style.left = ghostCard.getBoundingClientRect().left + "px";
-
-  // ghostCard.style.position = 'fixed'
-  // ghostCard.style.left = left + "px";
-  // ghostCard.style.top = top + document.documentElement.scrollTop + "px";
-
-}
-
 const mouseUp = (e) => {
   if (e.button === 2 || !draggedCard) {
     return;
   }
 
-  document.body.removeAttribute("style");
+  document.body.classList.remove('grabbing');
   document.querySelectorAll('.column__card').forEach((card) => {
     card.removeAttribute('style');
   })
@@ -159,10 +140,6 @@ const addDragEventListeners = () => {
     if (!document.querySelector(".column__edit-card-form")) {
       mouseUp(e);
     }
-  });
-
-  document.addEventListener("scroll", (e) => {
-    mouseScroll(e);
   });
 }
 

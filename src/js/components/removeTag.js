@@ -1,5 +1,5 @@
 import { saveData } from "./saveData";
-import { save, remove } from "./localStorage";
+import { save } from "./localStorage";
 import { msnry } from "./masonry";
 
 const removeTag = (btn) => {

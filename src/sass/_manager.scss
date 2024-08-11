@@ -33,6 +33,7 @@
 
     &:focus-visible {
       color: $color_primary;
+      outline: none;
     }
 
     &:hover {
@@ -357,20 +358,8 @@
     }
 
     &:focus-visible {
-      outline: none;
-      svg {
-        path {
-          fill: $color_primary;
-        }
-      }
-    }
-
-    &:hover {
-      svg {
-        path {
-          stroke: $color_primary;
-        }
-      }
+      outline: 2px rgb(66, 66, 66) solid;
+      outline-offset: 2px;
     }
   }
 

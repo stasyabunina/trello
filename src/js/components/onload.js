@@ -1,5 +1,5 @@
 import { saveData } from "./saveData";
-import { save, remove } from "./localStorage";
+import { save } from "./localStorage";
 import { loader, columns, gradient, backgroundList, backgroundBtn, tagMenuList, tagMenu, addTagBtn } from "./var";
 import addNoColumnsText from "./addNoColumnsText";
 import { msnry } from "./masonry";
@@ -202,6 +202,4 @@ document.addEventListener('click', (e) => {
     }
   }
 })
-
-remove();
 

@@ -163,4 +163,11 @@ button {
   opacity: 0;
 }
 
+.grabbing {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  cursor: grabbing;
+}
+
 @import "media";
