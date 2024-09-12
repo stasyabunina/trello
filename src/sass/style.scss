@@ -99,6 +99,7 @@ button {
   @include flex-row;
   justify-content: center;
   color: rgba(255, 255, 255, 0.388);
+  font-size: 0.6em;
 
   .link {
     color: rgba(255, 255, 255, 0.388);
